@@ -4,6 +4,6 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { RecModule } from './Rec/Rec.module';
 
 @Module({
-  imports:[CheckModule, ScheduleModule.forRoot(),RecModule],
+  imports:[CheckModule,RecModule],
 })
 export class AppModule {}
