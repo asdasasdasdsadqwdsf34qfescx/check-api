@@ -8,7 +8,7 @@ export class RecursiveService implements OnModuleInit {
     console.log('Funcție recursivă apelată la fiecare secundă!');
     const models = await getData();
     console.log(models[0])
-    setTimeout(() => this.callRecursiveFunction(), 10000);
+    // setTimeout(() => this.callRecursiveFunction(), 10000);
   }
 
   // Pornire automată la inițializarea modulului
