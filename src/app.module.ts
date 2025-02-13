@@ -3,6 +3,6 @@ import { CheckModule } from './Check/check.module';
 import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
-  imports:[CheckModule, ScheduleModule.forRoot()],
+  imports:[CheckModule],
 })
 export class AppModule {}
