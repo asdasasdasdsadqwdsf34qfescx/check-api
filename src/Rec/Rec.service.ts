@@ -15,6 +15,7 @@ const logsOnline: {
 export class RecursiveService implements OnModuleInit {
   // Funcția recursivă
   private async chekModelOnline(): Promise<void> {
+    console.clear()
     console.log("\n                    🔽🔽🔽🔽🔽🔽🔽🔽🔽🔽NEW CHECK SESSION🔽🔽🔽🔽🔽🔽🔽🔽🔽🔽")
     const models = await getData();
     const cbData = await this.getCbData();
@@ -72,9 +73,10 @@ export class RecursiveService implements OnModuleInit {
     console.log(`                              ⚠️⚠️⚠️⚠️⚠️             LOGS             ⚠️⚠️⚠️⚠️⚠️`)
     logsOnline.forEach(element => {
       if(element.status === 'online'){
-        console.log(`🟢 ${element.model} start stream ${element.date.toLocaleDateString()}`) 
+        console.log(`🟢 ${element.model} starts stream ${element.date.toLocaleDateString()} ${element.date.toLocaleTimeString()}`);
       }else (
-        console.log(`🔴 ${element.model} stop stream ${element.date}`) 
+        console.log(`🔴 ${element.model} stops stream ${element.date.toLocaleDateString()} ${element.date.toLocaleTimeString()}`)
+
       )
     });
     console.log('\n') 
