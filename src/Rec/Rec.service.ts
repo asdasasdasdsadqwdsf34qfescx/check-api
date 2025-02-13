@@ -72,7 +72,7 @@ export class RecursiveService implements OnModuleInit {
     console.log(`                              ⚠️⚠️⚠️⚠️⚠️             LOGS             ⚠️⚠️⚠️⚠️⚠️`)
     logsOnline.forEach(element => {
       if(element.status === 'online'){
-        console.log(`🟢 ${element.model} start stream ${element.date.toDateString()}`) 
+        console.log(`🟢 ${element.model} start stream ${element.date.toLocaleDateString()}`) 
       }else (
         console.log(`🔴 ${element.model} stop stream ${element.date}`) 
       )
