@@ -1,12 +1,8 @@
 import { Module } from '@nestjs/common';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
+import { CheckModule } from './Check/check.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
-  imports: [
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
-    }),
-  ],
+  imports:[CheckModule, ScheduleModule.forRoot()],
 })
 export class AppModule {}
