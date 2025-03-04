@@ -32,17 +32,17 @@ export interface VideoModel {
   averageRating: number;
 }
 
-import { createBrowserClient } from "@supabase/ssr";
-import { Database } from "./database.types";
-const supabaseUrl = "https://mhezydornlecnirzrcva.supabase.co";
+import { createBrowserClient } from '@supabase/ssr';
+import { Database } from './database.types';
+const supabaseUrl = 'https://mhezydornlecnirzrcva.supabase.co';
 const supabaseKey =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1oZXp5ZG9ybmxlY25pcnpyY3ZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg3Njc1NjgsImV4cCI6MjA1NDM0MzU2OH0.MdypDytkc-8IFTfECb1DZmBufWIrOYA3lnxOQ7WNl6A";
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1oZXp5ZG9ybmxlY25pcnpyY3ZhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg3Njc1NjgsImV4cCI6MjA1NDM0MzU2OH0.MdypDytkc-8IFTfECb1DZmBufWIrOYA3lnxOQ7WNl6A';
 
 export async function getData(): Promise<VideoModel[] | undefined> {
   const supabase = createBrowserClient<Database>(supabaseUrl, supabaseKey);
-  const { data, error } = await supabase.from("models").select();
+  const { data, error } = await supabase.from('models').select();
   if (error) {
-    console.error("Error deleting record:", error);
+    console.error('Error deleting record:', error);
   } else {
     return data;
   }
@@ -50,7 +50,7 @@ export async function getData(): Promise<VideoModel[] | undefined> {
 
 export async function add(updateData: VideoModel) {
   const supabase = createBrowserClient<Database>(supabaseUrl, supabaseKey);
-  const { error } = await supabase.from("models").insert(updateData);
+  const { error } = await supabase.from('models').insert(updateData);
   console.log(error);
 }
 
@@ -58,23 +58,33 @@ export async function update(updateData: VideoModel) {
   updateData.averageRating = calculateAverageRating(updateData);
   const supabase = createBrowserClient<Database>(supabaseUrl, supabaseKey);
   const { error } = await supabase
-    .from("models")
+    .from('models')
     .update(updateData)
-    .eq("id", updateData.id);
+    .eq('id', updateData.id);
   console.log(error);
 }
 
 export async function updateDbOnlineStatus(id: number, onlineCount: number) {
+  console.log("Update model")
+  console.log(id)
   const supabase = createBrowserClient<Database>(supabaseUrl, supabaseKey);
-  await supabase
-    .from("models")
+  const { error, data } = await supabase
+    .from('models')
     .update({ isOnline: true, onlineCount: onlineCount + 1 })
-    .eq("id", id);
+    .eq('id', id);
+
+  if (error) {
+    console.error(error);
+  }
+
+  if (data) {
+    console.log(data);
+  }
 }
 
 export async function updateDbOnlineStatusToFalse(id: number) {
   const supabase = createBrowserClient<Database>(supabaseUrl, supabaseKey);
-  await supabase.from("models").update({ isOnline: false }).eq("id", id);
+  await supabase.from('models').update({ isOnline: false }).eq('id', id);
 }
 
 export const calculateAverageRating = (video: VideoModel): number => {

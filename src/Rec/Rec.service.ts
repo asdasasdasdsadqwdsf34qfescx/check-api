@@ -6,11 +6,7 @@ import {
 } from 'src/supa-api.service';
 const cbApi =
   'https://chaturbate.com/affiliates/api/onlinerooms/?format=json&wm=3YHSK';
-const logsOnline: {
-  model: string;
-  date: Date;
-  status: 'online' | 'offline';
-}[] = [];
+
 @Injectable()
 export class RecursiveService implements OnModuleInit {
   // Funcția recursivă
@@ -21,73 +17,28 @@ export class RecursiveService implements OnModuleInit {
     );
     const models = await getData();
     const cbData = await this.getCbData();
-    let currentModelOnline: string[] = [];
     await Promise.all(
       models.map(async (model) => {
         const wasOnline = model.isOnline;
         const isOnline = await this.checkIfModelIsOnline(model.name, cbData);
-        if (isOnline) {
-          currentModelOnline.push(model.name);
-        }
-
+ 
+        
         if (wasOnline !== isOnline) {
           if (isOnline) {
-            console.log(`🟢${model.name} is ONLINE`);
-            console.log('%c────────────────────────────', 'color: #e0e0e0;');
-            console.log('\n');
             await updateDbOnlineStatus(model.id!, model.onlineCount!);
-            logsOnline.push({
-              model: model.name,
-              date: new Date(),
-              status: 'online',
-            });
+
           } else {
-            console.log(`🔴${model.name}  goes OFFLINE`);
-            console.log('%c────────────────────────────', 'color: #e0e0e0;');
-            console.log('\n');
             await updateDbOnlineStatusToFalse(model.id!);
-            logsOnline.push({
-              model: model.name,
-              date: new Date(),
-              status: 'offline',
-            });
+
           }
         }
       }),
     );
 
-    console.log(
-      '%c🚀 Current Model Online - %s',
-      'background: #e3fcec; color: #0a8150; font-size: 14px; font-weight: bold; padding: 4px 8px; border-radius: 4px;',
-      new Date().toLocaleTimeString(),
-    );
 
-    currentModelOnline.forEach((model, index) => {
-      // Inițializare buffer pentru fiecare grup de 5
-      if (index % 5 === 0 && index !== 0) {
-        console.log(
-          '\n────────────────────────────────────────────────────────────────────────────────────────────────────────────────',
-        );
-      }
 
-      process.stdout.write(`| ${model || 'N/A'} |`);
-    });
-    console.log('\n');
-    console.log(
-      `                              ⚠️⚠️⚠️⚠️⚠️             LOGS             ⚠️⚠️⚠️⚠️⚠️`,
-    );
-    logsOnline.forEach((element) => {
-      if (element.status === 'online') {
-        console.log(
-          `🟢 ${element.model} starts stream ${element.date.toLocaleDateString()} ${element.date.toLocaleTimeString()}`,
-        );
-      } else
-        console.log(
-          `🔴 ${element.model} stops stream ${element.date.toLocaleDateString()} ${element.date.toLocaleTimeString()}`,
-        );
-    });
-    console.log('\n');
-    console.log('\n');
+
+
     setTimeout(() => this.chekModelOnline(), 60000);
   }
 
@@ -111,7 +62,14 @@ export class RecursiveService implements OnModuleInit {
         (item: any) =>
           item.username.toLowerCase() === modelUsername.toLowerCase(),
       );
-      return model ? (model.current_show === "public'" ? true : false) : false;
+
+      if (model) {
+        if (model.current_show && model.current_show === 'public') {
+          return true;
+        }
+      }
+
+      return false;
     } catch (error) {
       console.error('Error checking model status:', error);
       return false;
