@@ -50,7 +50,7 @@ export class RecursiveService implements OnModuleInit {
       }),
     );
 
-    setTimeout(() => this.chekModelOnline(), 30000);
+    setTimeout(() => this.chekModelOnline(), 60000);
   }
 
   async getCbData() {
