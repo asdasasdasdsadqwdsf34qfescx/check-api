@@ -28,6 +28,7 @@
     "@nestjs/serve-static": "^5.0.2",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.48.1",
+    "cheerio": "^1.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1"
   },
